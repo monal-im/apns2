@@ -160,6 +160,7 @@ impl Client {
 
             builder = builder.header(AUTHORIZATION, auth.as_bytes());
         }
+        builder = builder.header("apns-push-type", payload.options.apns_push_type.to_string().as_bytes());
 
         let payload_json = payload.to_json_string().unwrap();
         builder = builder.header(CONTENT_LENGTH, format!("{}", payload_json.len()).as_bytes());
