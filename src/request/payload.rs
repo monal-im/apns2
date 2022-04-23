@@ -2,7 +2,7 @@
 
 use crate::error::Error;
 use crate::request::notification::{LocalizedAlert, NotificationOptions, WebPushAlert};
-use erased_serde::Serialize;
+use serde::Serialize;
 use serde_json::{self, Value};
 use std::collections::BTreeMap;
 
@@ -69,7 +69,10 @@ impl<'a> Payload<'a> {
     /// );
     /// # }
     /// ```
-    pub fn add_custom_data(&mut self, root_key: &'a str, data: &dyn Serialize) -> Result<&mut Self, Error> {
+    pub fn add_custom_data<T>(&mut self, root_key: &'a str, data: T) -> Result<&mut Self, Error>
+    where
+        T: Serialize,
+    {
         self.data.insert(root_key, serde_json::to_value(data)?);
 
         Ok(self)
