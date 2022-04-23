@@ -166,7 +166,7 @@ fn get_time() -> i64 {
 mod tests {
     use super::*;
 
-    const PRIVATE_KEY: &'static str = indoc!(
+    const PRIVATE_KEY: &str = indoc!(
         "-----BEGIN PRIVATE KEY-----
         MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg8g/n6j9roKvnUkwu
         lCEIvbDqlUhA5FOzcakkG90E8L+hRANCAATKS2ZExEybUvchRDuKBftotMwVEus3
