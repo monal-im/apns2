@@ -25,7 +25,7 @@ http = "^0.2"
 base64 = "^0.13"
 log = "^0.4"
 hyper = { version = "^0.14", features = ["client", "http2"] }
-hyper-alpn = "^0.3"
+hyper-alpn = "^0.4"
 
 [dev-dependencies]
 argparse = "^0.2"
