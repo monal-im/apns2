@@ -60,6 +60,8 @@ pub struct NotificationOptions<'a> {
     /// user as a single notification. The value of this key must not exceed 64
     /// bytes.
     pub apns_collapse_id: Option<CollapseId<'a>>,
+
+    pub apns_push_type: PushType,
 }
 
 /// The importance how fast to bring the notification for the user..
@@ -85,6 +87,40 @@ impl fmt::Display for Priority {
         };
 
         write!(f, "{}", priority)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum PushType {
+    Alert,
+    Background,
+    Location,
+    Voip,
+    Complication,
+    Fileprovider,
+    Mdm,
+    Liveactivity,
+}
+
+impl fmt::Display for PushType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let push_type = match self {
+            Self::Alert => "alert",
+            Self::Background => "background",
+            Self::Location => "location",
+            Self::Voip => "voip",
+            Self::Complication => "complication",
+            Self::Fileprovider => "fileprovider",
+            Self::Mdm => "mdm",
+            Self::Liveactivity => "liveactivity",
+        };
+        write!(f, "{}", push_type)
+    }
+}
+
+impl Default for PushType {
+    fn default() -> Self {
+        PushType::Alert
     }
 }
 
