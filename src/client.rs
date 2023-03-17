@@ -74,8 +74,11 @@ impl Client {
         let mut cert_der: Vec<u8> = Vec::new();
         certificate.read_to_end(&mut cert_der)?;
 
-        let pkcs = openssl::pkcs12::Pkcs12::from_der(&cert_der)?.parse(password)?;
-        let connector = AlpnConnector::with_client_cert(&pkcs.cert.to_pem()?, &pkcs.pkey.private_key_to_pem_pkcs8()?)?;
+        let pkcs = openssl::pkcs12::Pkcs12::from_der(&cert_der)?.parse2(password)?;
+        let connector = AlpnConnector::with_client_cert(
+            &pkcs.cert.ok_or(Error::CertMissingPubKey)?.to_pem()?,
+            &pkcs.pkey.ok_or(Error::CertMissingPrivKey)?.private_key_to_pem_pkcs8()?,
+        )?;
 
         Ok(Self::new(connector, None, endpoint))
     }
@@ -182,7 +185,7 @@ mod tests {
     use hyper::Method;
     use hyper_alpn::AlpnConnector;
 
-    const PRIVATE_KEY: &'static str = "-----BEGIN PRIVATE KEY-----
+    const PRIVATE_KEY: &str = "-----BEGIN PRIVATE KEY-----
 MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg8g/n6j9roKvnUkwu
 lCEIvbDqlUhA5FOzcakkG90E8L+hRANCAATKS2ZExEybUvchRDuKBftotMwVEus3
 jDwmlD1Gg0yJt1e38djFwsxsfr5q2hv0Rj9fTEqAPr8H7mGm0wKxZ7iQ

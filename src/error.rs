@@ -38,6 +38,12 @@ pub enum Error {
     #[error("Error in reading a certificate file: {0}")]
     ReadError(#[from] io::Error),
 
+    #[error("Cert is missing a pub key")]
+    CertMissingPubKey,
+
+    #[error("Cert is missing a private key")]
+    CertMissingPrivKey,
+
     /// Unexpected private key (only EC keys are supported).
     #[cfg(all(not(feature = "openssl"), feature = "ring"))]
     #[error("Unexpected private key: {0}")]
